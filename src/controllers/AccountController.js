@@ -138,7 +138,7 @@ class AccountController {
                 if (!isMatch) {
                     res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized })
                 }
-                await connect.query(SqlQuery.deleteAccount, id)
+                await connect.query(SqlQuery.deleteAccount, id);
                 if (account.photo) {
                     const filePath = path.join(__dirname, `../..${account.photo}`);
                     if (fs.existsSync(filePath)) {
