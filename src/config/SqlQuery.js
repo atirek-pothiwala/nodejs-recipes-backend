@@ -22,7 +22,7 @@ class SqlQuery {
     r.cook_time,
     r.servings,
     r.created_at,
-    CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"id\":', i.id, ',\"name\":\"', i.name, '\",\"quantity\":\"', i.quantity, '\",\"unit\":\"', i.unit, '\"}') SEPARATOR ','), ']') AS ingredients, 
+    CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"id\":', i.id, ',\"name\":\"', i.name, '\",\"quantity\":', i.quantity, ',\"unit\":\"', i.unit, '\"}') SEPARATOR ','), ']') AS ingredients, 
     CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"id\":', ins.id, ',\"stepNumber\":', ins.step_number, ',\"description\":\"', ins.description, '\"}') ORDER BY ins.step_number SEPARATOR ','), ']') AS instructions, 
     CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"id\":', t.id, ',\"description\":\"', t.description, '\"}') SEPARATOR ','), ']') AS tips 
     FROM recipes r

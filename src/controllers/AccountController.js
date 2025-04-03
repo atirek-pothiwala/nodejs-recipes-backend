@@ -48,7 +48,7 @@ class AccountController {
                 { id: result.insertId, email: email },
                 process.env.JWT_SECRET
             );
-            return res.status(StatusCode.Created).json({ token: generatedToken });
+            return res.status(StatusCode.Created).send(generatedToken);
         } catch (error) {
             return res.status(StatusCode.InternalServerError).json({ error: error.message });
         }
@@ -113,7 +113,7 @@ class AccountController {
                 { id: account.id, email: account.email },
                 process.env.JWT_SECRET
             );
-            return res.status(StatusCode.OK).json({ token: generatedToken });
+            return res.status(StatusCode.OK).send(generatedToken);
         } catch (error) {
             return res.status(StatusCode.InternalServerError).json({ error: error.message });
         }
