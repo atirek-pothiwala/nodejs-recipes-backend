@@ -5,9 +5,10 @@ const authenticate = require("../middlewares/Authenticate");
 
 const router = express.Router();
 
-router.post("/upload", authenticate, multipart.create("recipes").single("photo"), controller.upload);
-router.post("/create", authenticate, controller.create);
+router.post("/upload", multipart.create("recipes").single("photo"), controller.upload);
+router.post("/create", controller.create);
 router.get("/list", authenticate, controller.list);
-router.delete("/delete", authenticate, controller.delete);
+router.get("/detail/:id", authenticate, controller.detail);
+router.delete("/delete/:id", controller.delete);
 
 module.exports = router;

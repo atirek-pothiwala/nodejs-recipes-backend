@@ -51,8 +51,31 @@ class RecipeController {
 
     // GET API - List All Recipes
     static async list(req, res) {
+        if (!req.account.id) {
+            return res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
+        }
         try {
             const [results] = await db.query(SqlQuery.listRecipe);
+            return res.status(StatusCode.OK).json(results);
+        } catch (error) {
+            return res.status(StatusCode.InternalServerError).json({ error: error.message });
+        }
+    }
+
+    // GET API - List All Recipes
+    static async detail(req, res) {
+        if (!req.account.id) {
+            return res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
+        }
+        const recipeId = req.params.id;
+        if (!recipeId) {
+            return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
+        }
+        try {
+            const [results] = await db.query(SqlQuery.getRecipeViaId, recipeId);
+            if (results.length == 0 || results[0].recipe_id == null) {
+                return res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
+            }
             const filterResult = results.map(row => ({
                 id: row.recipe_id,
                 photo: row.photo,
@@ -68,7 +91,7 @@ class RecipeController {
                 instructions: JSON.parse(row.instructions || "[]"),
                 tips: JSON.parse(row.tips || "[]")
             }));
-            return res.status(StatusCode.OK).json(filterResult);
+            return res.status(StatusCode.OK).json(filterResult[0]);
         } catch (error) {
             return res.status(StatusCode.InternalServerError).json({ error: error.message });
         }
@@ -76,17 +99,17 @@ class RecipeController {
 
     // DELETE API - Delete Recipe
     static async delete(req, res) {
-        const { id } = req.body;
-        if (!id) {
+        const recipeId = req.params.id;
+        if (!recipeId) {
             return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
         }
         const connect = await db.getConnection();
         try {
             await connect.beginTransaction();
-            const [results] = await connect.query(SqlQuery.getRecipeViaId, id);
+            const [results] = await connect.query(SqlQuery.getRecipeViaId, recipeId);
             if (results.length > 0) {
                 let recipe = results[0];
-                await connect.query(SqlQuery.deleteRecipe, id)
+                await connect.query(SqlQuery.deleteRecipe, recipeId)
                 if (recipe.photo) {
                     const filePath = path.join(__dirname, `../..${recipe.photo}`);
                     console.log(`File Path: ${filePath}`);

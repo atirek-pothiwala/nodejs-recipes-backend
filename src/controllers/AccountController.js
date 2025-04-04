@@ -55,7 +55,7 @@ class AccountController {
     }
 
     // GET API - Get Account
-    static async getDetails(req, res) {
+    static async detail(req, res) {
         if (!req.account.id) {
             return res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
         }
@@ -71,7 +71,7 @@ class AccountController {
     }
 
     // PUT API - Set Account
-    static async updateDetails(req, res) {
+    static async update(req, res) {
         if (!req.account.id) {
             return res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
         }

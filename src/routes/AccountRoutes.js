@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.post("/register", controller.register);
 router.post("/login", controller.login);
-router.get("/profile", authenticate, controller.getDetails);
+router.get("/profile", authenticate, controller.detail);
 router.post("/upload", authenticate, multipart.create("accounts").single("photo"), controller.upload);
-router.put("/profile", authenticate, controller.updateDetails);
+router.put("/profile", authenticate, controller.update);
 router.delete("/delete", authenticate, controller.delete);
 
 module.exports = router;
