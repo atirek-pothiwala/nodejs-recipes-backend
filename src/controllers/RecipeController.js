@@ -67,7 +67,7 @@ class RecipeController {
         if (!req.account.id) {
             return res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
         }
-        const recipeId = req.params.id;
+        const recipeId = req.query.id;
         if (!recipeId) {
             return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
         }
