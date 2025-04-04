@@ -92,10 +92,10 @@ class RecipeController {
                     console.log(`File Path: ${filePath}`);
                     if (fs.existsSync(filePath)) {
                         console.log('File Path: Exists');
-                        fs.unlink(filePath, null);
+                        fs.unlinkSync(filePath);
                     }
                 }
-                res.status(StatusCode.NoContent).json();
+                res.status(StatusCode.NoContent).end();
             } else {
                 res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
             }

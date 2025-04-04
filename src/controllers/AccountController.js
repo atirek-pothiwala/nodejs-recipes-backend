@@ -85,7 +85,7 @@ class AccountController {
             if (!result.insertId) {
                 return res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
             }
-            return res.status(StatusCode.NoContent).json();
+            return res.status(StatusCode.NoContent).end();
         } catch (error) {
             return res.status(StatusCode.InternalServerError).json({ error: error.message });
         }
@@ -141,11 +141,13 @@ class AccountController {
                 await connect.query(SqlQuery.deleteAccount, id);
                 if (account.photo) {
                     const filePath = path.join(__dirname, `../..${account.photo}`);
+                    console.log(`File Path: ${filePath}`);
                     if (fs.existsSync(filePath)) {
-                        fs.unlink(filePath, null);
+                        console.log('File Path: Exists');
+                        fs.unlinkSync(filePath);
                     }
                 }
-                res.status(StatusCode.NoContent).json();
+                res.status(StatusCode.NoContent).end();
             } else {
                 res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
             }

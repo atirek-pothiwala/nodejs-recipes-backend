@@ -11,7 +11,7 @@ const Authenticate = (req, res, next) => {
         req.account = jwt.verify(token.replace("Bearer ", ""), process.env.JWT_SECRET);
         next();
     } catch (error) {
-        res.status(StatusCode.Forbidden).json({ error: StatusCode.Forbidden });
+        res.status(StatusCode.Forbidden).json({ error: StatusMessage.Forbidden });
     }
 };
 
