@@ -135,6 +135,7 @@ class AccountController {
                 let account = results[0];
                 // Compare hashed password
                 const isMatch = await bcrypt.compare(password, account.password);
+                //const isMatch = password == account.password;
                 if (!isMatch) {
                     res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized })
                 }
