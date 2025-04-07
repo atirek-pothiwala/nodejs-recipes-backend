@@ -80,10 +80,7 @@ class AccountController {
         }
         try {
             const params = [firstName, lastName, req.account.id];
-            const [result] = await db.query(SqlQuery.updateAccount, params);
-            if (!result.insertId) {
-                return res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
-            }
+            await db.query(SqlQuery.updateAccount, params);
             return res.status(StatusCode.NoContent).end();
         } catch (error) {
             return res.status(StatusCode.InternalServerError).json({ error: error.message });
@@ -175,14 +172,10 @@ class AccountController {
                 const isMatch = await bcrypt.compare(currentPassword, account.password);
                 if (isMatch) {
                     const hashedPassword = await bcrypt.hash(newPassword, 10);
-                    const [result] = await db.query(SqlQuery.updatePassword, [hashedPassword, req.account.id]);
-                    if (!result.insertId) {
-                        res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
-                    } else {
-                        res.status(StatusCode.NoContent).end();
-                    }
+                    await connect.query(SqlQuery.updatePassword, [hashedPassword, req.account.id]);
+                    res.status(StatusCode.NoContent).end();
                 } else {
-                    res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
+                    res.status(StatusCode.UnAuthorized).json({ error: "Password Mismatch" });
                 }
             } else {
                 res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
