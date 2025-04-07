@@ -6,6 +6,7 @@ class SqlQuery {
     static deleteAccount = "DELETE FROM accounts WHERE id = ?";
     static uploadPhoto = "UPDATE accounts SET photo = ? WHERE id = ?";
     static updateAccount = "UPDATE accounts SET first_name = ?, last_name = ? WHERE id = ?";
+    static updatePassword = "UPDATE accounts SET password = ? WHERE id = ?";
 
     // RECIPE QUERIES
     static createRecipe = "INSERT INTO recipes (photo, name, description, chef, type, prep_time, cook_time, servings) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";

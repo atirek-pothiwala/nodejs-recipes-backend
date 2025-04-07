@@ -36,8 +36,7 @@ class AccountController {
             return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
         }
         try {
-            const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            const hashedPassword = await bcrypt.hash(password, 10);
             const params = [firstName, lastName, email, hashedPassword];
 
             const [result] = await db.query(SqlQuery.createAccount, params);
@@ -104,7 +103,6 @@ class AccountController {
                 return res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
             }
             let account = results[0];
-            // Compare hashed password
             const isMatch = await bcrypt.compare(password, account.password);
             if (!isMatch) {
                 return res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized })
@@ -119,7 +117,7 @@ class AccountController {
         }
     }
 
-    // DELETE API - DELETE Account
+    // DELETE API - Delete Account
     static async delete(req, res) {
         const id = req.account.id;
         const { password } = req.body;
@@ -133,9 +131,7 @@ class AccountController {
             const [results] = await connect.query(SqlQuery.getAccountViaId, id);
             if (results.length > 0) {
                 let account = results[0];
-                // Compare hashed password
                 const isMatch = await bcrypt.compare(password, account.password);
-                //const isMatch = password == account.password;
                 if (!isMatch) {
                     res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized })
                 }
@@ -151,6 +147,45 @@ class AccountController {
                 res.status(StatusCode.NoContent).end();
             } else {
                 res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
+            }
+            await connect.commit();
+        } catch (error) {
+            res.status(StatusCode.InternalServerError).json({ error: error.message });
+            await connect.rollback();
+        } finally {
+            connect.release();
+        }
+    }
+
+    // POST API - Change Account Password
+    static async changePassword(req, res) {
+        if (!req.account.id) {
+            return res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
+        }
+        const { currentPassword, newPassword } = req.body;
+        if (!currentPassword || !newPassword) {
+            return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
+        }
+        const connect = await db.getConnection();
+        try {
+            await connect.beginTransaction();
+            const [results] = await connect.query(SqlQuery.getAccountViaId, req.account.id);
+            if (results.length > 0) {
+                let account = results[0];
+                const isMatch = await bcrypt.compare(currentPassword, account.password);
+                if (isMatch) {
+                    const hashedPassword = await bcrypt.hash(newPassword, 10);
+                    const [result] = await db.query(SqlQuery.updatePassword, [hashedPassword, req.account.id]);
+                    if (!result.insertId) {
+                        res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
+                    } else {
+                        res.status(StatusCode.NoContent).end();
+                    }
+                } else {
+                    res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
+                }
+            } else {
+                res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
             }
             await connect.commit();
         } catch (error) {

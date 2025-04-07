@@ -11,5 +11,6 @@ router.get("/profile", authenticate, controller.detail);
 router.post("/upload", authenticate, multipart.create("accounts").single("photo"), controller.upload);
 router.put("/profile", authenticate, controller.update);
 router.delete("/delete", authenticate, controller.delete);
+router.delete("/changePassword", authenticate, controller.changePassword);
 
 module.exports = router;
