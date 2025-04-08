@@ -62,6 +62,20 @@ class RecipeController {
         }
     }
 
+    // GET API - List Recipes using Ids
+    static async filterList(req, res) {
+        if (!req.account.id) {
+            return res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized });
+        }
+        const ids = req.query.ids;
+        try {
+            const [results] = await db.query(SqlQuery.listRecipeViaIds, [ids.split(',')]);
+            return res.status(StatusCode.OK).json(results);
+        } catch (error) {
+            return res.status(StatusCode.InternalServerError).json({ error: error.message });
+        }
+    }
+
     // GET API - List All Recipes
     static async detail(req, res) {
         if (!req.account.id) {

@@ -12,6 +12,8 @@ class SqlQuery {
     static createRecipe = "INSERT INTO recipes (photo, name, description, chef, type, prep_time, cook_time, servings) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     static listRecipe = "SELECT * FROM recipes"
+    static listRecipeViaIds = "SELECT * FROM recipes WHERE id IN (?)"
+
     static getRecipeViaId = `
     SELECT
     r.id AS recipe_id,

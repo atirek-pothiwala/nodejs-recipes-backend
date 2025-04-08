@@ -10,5 +10,6 @@ router.post("/create", controller.create);
 router.get("/list", authenticate, controller.list);
 router.get("/detail", authenticate, controller.detail);
 router.delete("/delete/:id", controller.delete);
+router.get("/filterList", authenticate, controller.filterList);
 
 module.exports = router;
