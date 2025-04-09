@@ -18,34 +18,111 @@ class RecipeController {
 
     // POST API - Create Recipe
     static async create(req, res) {
-        const { photoUrl, name, description, chef, type, prepTime, cookTime, servings, ingredients, instructions, tips } = req.body;
+        const { photoUrl, name, description, chef, type, prepTime, cookTime, servings } = req.body;
         if (!photoUrl || !name || !description || !chef || !type || !prepTime || !cookTime || !servings) {
             return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
         }
 
         const params = [photoUrl, name, description, chef, type, prepTime, cookTime, servings];
-        const connect = await db.getConnection();
         try {
-            await connect.beginTransaction();
-            const [result] = await connect.query(SqlQuery.createRecipe, params);
-            const recipeId = result.insertId;
-
-            const ingredientValues = ingredients.map(i => [recipeId, i.name, i.quantity, i.unit]);
-            await connect.query(SqlQuery.addIngredients, [ingredientValues]);
-
-            const instructionValues = instructions.map(i => [recipeId, i.stepNumber, i.description]);
-            await connect.query(SqlQuery.addInstructions, [instructionValues]);
-
-            const tipsValues = tips.map(i => [recipeId, i]);
-            await connect.query(SqlQuery.addTips, [tipsValues]);
-
-            res.status(StatusCode.OK).json({ id: result.insertId });
-            await connect.commit();
+            const [result] = await db.query(SqlQuery.createRecipe, params);
+            if (!result.insertId) {
+                return res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
+            }
+            return res.status(StatusCode.OK).json({ id: result.insertId });
         } catch (error) {
-            res.status(StatusCode.InternalServerError).json({ error: error.message });
-            await connect.rollback();
-        } finally {
-            connect.release();
+            return res.status(StatusCode.InternalServerError).json({ error: error.message });
+        }
+    }
+
+    static async addIngredients(req, res) {
+        const { id, ingredients } = req.body;
+        if (!id || !Array.isArray(ingredients) || ingredients.length === 0) {
+            return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
+        }
+        try {
+            const values = ingredients.map(i => [id, i.name, i.quantity]);
+            const [results] = await db.query(SqlQuery.addIngredients, [values]);
+            if (results.length == 0) {
+                return res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
+            }
+            return res.status(StatusCode.NoContent).end();
+        } catch (error) {
+            return res.status(StatusCode.InternalServerError).json({ error: error.message });
+        }
+    }
+
+    static async addInstructions(req, res) {
+        const { id, instructions } = req.body;
+        if (!id || !Array.isArray(instructions) || instructions.length === 0) {
+            return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
+        }
+        try {
+            const values = instructions.map(i => [id, i.stepNumber, i.description]);
+            const [results] = await db.query(SqlQuery.addInstructions, [values]);
+            if (results.length == 0) {
+                return res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
+            }
+            return res.status(StatusCode.NoContent).end();
+        } catch (error) {
+            return res.status(StatusCode.InternalServerError).json({ error: error.message });
+        }
+    }
+
+    static async addTips(req, res) {
+        const { id, tips } = req.body;
+        if (!id || !Array.isArray(tips) || tips.length === 0) {
+            return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
+        }
+        try {
+            const values = tips.map(i => [id, i]);
+            const [results] = await db.query(SqlQuery.addTips, [values]);
+            if (results.length == 0) {
+                return res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
+            }
+            return res.status(StatusCode.NoContent).end();
+        } catch (error) {
+            return res.status(StatusCode.InternalServerError).json({ error: error.message });
+        }
+    }
+
+    static async addNutritions(req, res) {
+        const { id, nutritions } = req.body;
+        if (!id || !nutritions) {
+            return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
+        }
+
+        if (!nutritions.calories || !nutritions.fat || !nutritions.saturatedFat || !nutritions.transFat || !nutritions.carbohydrate ||
+            !nutritions.fibre || !nutritions.sugar || !nutritions.protein || !nutritions.sodium) {
+            return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
+        }
+
+        try {
+            const params = [id, nutritions.calories, nutritions.fat, nutritions.saturatedFat, nutritions.transFat, nutritions.carbohydrate, nutritions.fibre, nutritions.sugar, nutritions.protein, nutritions.sodium]
+            const [results] = await db.query(SqlQuery.addNutritions, params);
+            if (results.length == 0) {
+                return res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
+            }
+            return res.status(StatusCode.NoContent).end();
+        } catch (error) {
+            return res.status(StatusCode.InternalServerError).json({ error: error.message });
+        }
+    }
+
+    static async addVariations(req, res) {
+        const { id, variations } = req.body;
+        if (!id || !Array.isArray(variations) || variations.length === 0) {
+            return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
+        }
+        try {
+            const values = variations.map(i => [id, i.name, i.description]);
+            const [results] = await db.query(SqlQuery.addVariations, [values]);
+            if (results.length == 0) {
+                return res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
+            }
+            return res.status(StatusCode.NoContent).end();
+        } catch (error) {
+            return res.status(StatusCode.InternalServerError).json({ error: error.message });
         }
     }
 
@@ -103,7 +180,9 @@ class RecipeController {
                 createdAt: row.created_at,
                 ingredients: JSON.parse(row.ingredients || "[]"),
                 instructions: JSON.parse(row.instructions || "[]"),
-                tips: JSON.parse(row.tips || "[]")
+                nutritions: JSON.parse(row.nutritions || "[]")[0],
+                tips: JSON.parse(row.tips || "[]"),
+                variations: JSON.parse(row.variations || "[]")
             }));
             return res.status(StatusCode.OK).json(filterResult[0]);
         } catch (error) {
