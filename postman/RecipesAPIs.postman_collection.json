@@ -1,0 +1,594 @@
+{
+	"info": {
+		"_postman_id": "a4044ce2-8fb1-47b4-9d14-4a87a116a2ef",
+		"name": "RecipesAPIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38514152"
+	},
+	"item": [
+		{
+			"name": "Create Account",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Atirek\",\n    \"lastName\": \"Pothiwala\",\n    \"email\": \"atirekpothiwala@recipes.com\",\n    \"password\": \"test@2025\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/accounts/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"accounts",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Recipe Photo",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjIxMDA2fQ.FtX669rwWgyC-4McPq7pRmZbU_o7pOFvN-RIvxzRDLY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/Users/atirekpothiwala/Downloads/vada-pav.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/recipes/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recipes",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Account Photo",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzODcyMjM5fQ.xha2hSNFGlBIOdC6vWcmVhKsyOTKsQzraHzgipFowIA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/Users/atirekpothiwala/Downloads/shrinathji.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/accounts/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"accounts",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Account",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"atirekpothiwala@recipes.com\",\n    \"password\": \"test@2025\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/accounts/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"accounts",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Recipe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjIxMDA2fQ.FtX669rwWgyC-4McPq7pRmZbU_o7pOFvN-RIvxzRDLY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"photoUrl\": \"/uploads/recipes/1743810697244-676322145.jpg\",\n    \"name\": \"Vada Pav\",\n    \"description\": \"Vada Pav are infinitely customizable! This recipe is perfect for busy weekdays, but below we offer a few variations that can be delicious when you have some more time to play around in the kitchen.\",\n    \"chef\": \"Tasty Vada Pav\",\n    \"type\": 1,\n    \"prepTime\": 20,\n    \"cookTime\": 5,\n    \"servings\": 2,\n    \"ingredients\": [\n        {\n            \"name\": \"Eggs\",\n            \"quantity\": 2,\n            \"unit\": \"qty\"\n        },\n        {\n            \"name\": \"Water\",\n            \"quantity\": 1,\n            \"unit\": \"tbsp\"\n        },\n        {\n            \"name\": \"Pinch Salt\",\n            \"quantity\": 0,\n            \"unit\": \"\"\n        },\n        {\n            \"name\": \"Pinch Pepper\",\n            \"quantity\": 0,\n            \"unit\": \"\"\n        },\n        {\n            \"name\": \"Butter or Oil\",\n            \"quantity\": 1,\n            \"unit\": \"tbsp\"\n        },\n        {\n            \"name\": \"Filling ingredients\",\n            \"quantity\": 0,\n            \"unit\": \"\"\n        }\n    ],\n    \"instructions\": [\n        {\n            \"stepNumber\": 1,\n            \"description\": \"Whisk eggs, water, salt and pepper.\"\n        },\n        {\n            \"stepNumber\": 2,\n            \"description\": \"Melt butter in an 8-inch (20 cm) nonstick frying pan over medium heat. Pour in egg mixture. As eggs set around edge of pan, with spatula, gently push cooked portions toward centre of skillet. Tilt and rotate skillet to allow uncooked egg to flow into empty spaces.\"\n        },\n        {\n            \"stepNumber\": 3,\n            \"description\": \"When eggs are almost set on surface but still look moist, cover half of omelette with filling. Slip spatula under unfilled side; fold over onto filled half.\"\n        },\n        {\n            \"stepNumber\": 4,\n            \"description\": \"Cook for a minute, then slide omelette onto plate.\"\n        }\n    ],\n    \"tips\": [\n        \"Nutrition facts are based on a 2 egg omelette without filling.\",\n        \"Using the proper skillet or pan is important to successful omelette making. The ideal skillet for a 1, 2 or 3-egg omelette is about 8 inches (20 cm) in diameter at the base. It should be shallow with sloping sides to make it easier to slide the omelette out of the skillet and onto a plate.\",\n        \"An omelette can be made quickly and easier if the skillet is hot when the egg mixture is added. The skillet is hot enough when a drop of water rolls around instead of bursting into steam immediately.\",\n        \"Preparing individual omelettes, rather than one large one, will result in lighter and fluffier omelettes that are easier to handle.\",\n        \"The Perfect Omelette recipe can be multiplied for as many servings as you need. Use 1/2 cup (125 mL) of egg mixture for each 2-egg omelette and 3/4 cup (175 mL) for a 3-egg omelette.\",\n        \"The fewer eggs, the quicker it will cook, so you can use a smaller skillet for a one- or two-egg omelette and one that measures 8-inches (20 cm) at the base for a 3-egg omelette.\",\n        \"You can use cooking spray in place of the butter or oil.\",\n        \"Covering the folded omelette and cooking for an extra minute helps to heat up the filling, melt any cheese, and finish cooking any remaining undercooked egg. This step is optional if your filling doesn’t require heating and the egg already appears cooked to your liking.\"\n    ],\n    \"nutritions\": {\n        \"calories\": \"148 mg\",\n        \"fat\": \"11 g\",\n        \"saturated Fat\":\"3 g\",\n        \"transFat\": \"0 g\",\n        \"carbohydrate\": \"2 g\",\n        \"fibre\": \"0 g\",\n        \"sugar\": \"0 g\",\n        \"protein\": \"12 g\",\n        \"sodium\": \"207 mg\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/recipes/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recipes",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Ingredients",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjIxMDA2fQ.FtX669rwWgyC-4McPq7pRmZbU_o7pOFvN-RIvxzRDLY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 18,\n    \"ingredients\": [\n        {\n            \"name\": \"Eggs\",\n            \"quantity\": 2,\n            \"unit\": \"qty\"\n        },\n        {\n            \"name\": \"Water\",\n            \"quantity\": 1,\n            \"unit\": \"tbsp\"\n        },\n        {\n            \"name\": \"Pinch Salt\",\n            \"quantity\": 0,\n            \"unit\": \"\"\n        },\n        {\n            \"name\": \"Pinch Pepper\",\n            \"quantity\": 0,\n            \"unit\": \"\"\n        },\n        {\n            \"name\": \"Butter or Oil\",\n            \"quantity\": 1,\n            \"unit\": \"tbsp\"\n        },\n        {\n            \"name\": \"Filling ingredients\",\n            \"quantity\": 0,\n            \"unit\": \"\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/recipes/ingredients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recipes",
+						"ingredients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Variations",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjIxMDA2fQ.FtX669rwWgyC-4McPq7pRmZbU_o7pOFvN-RIvxzRDLY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 18,\n    \"variations\": [\n        {\n            \"name\": \"Western Omelette\",\n            \"description\": \"Spray skillet with cooking spray or heat 1 tsp (5 mL) vegetable oil in skillet. Add 1/4 cup (60 mL) finely chopped ham, 2 tbsp (30 mL) chopped sweet green pepper and 1 tbsp (15 mL) finely chopped onion; cook, stirring frequently, until vegetables are tender. Pour in egg mixture and cook as directed in the Basic Omelette recipe.\"\n        },\n        {\n            \"name\": \"Fine Herbs Omelette\",\n            \"description\": \"Add 2 tbsp (30 mL) finely chopped parsley, 1 tsp (5 mL) finely chopped green onion, 1/2 tsp (2 mL) dried tarragon and 1/8 tsp (0.5 mL) finely chopped garlic to egg mixture in the Basic Omelette recipe. Cook as directed.\"\n        },\n        {\n            \"name\": \"Mushroom and Spinach Omelette\",\n            \"description\": \"Filling ingredients: 3 tbsp (45 mL) each sauteed mushrooms, wilted spinach (or thawed and well-drained frozen spinach), sliced green onions, and shredded old Cheddar cheese.\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/recipes/variations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recipes",
+						"variations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Instructions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjIxMDA2fQ.FtX669rwWgyC-4McPq7pRmZbU_o7pOFvN-RIvxzRDLY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 18,\n    \"instructions\": [\n        {\n            \"stepNumber\": 1,\n            \"description\": \"Whisk eggs, water, salt and pepper.\"\n        },\n        {\n            \"stepNumber\": 2,\n            \"description\": \"Melt butter in an 8-inch (20 cm) nonstick frying pan over medium heat. Pour in egg mixture. As eggs set around edge of pan, with spatula, gently push cooked portions toward centre of skillet. Tilt and rotate skillet to allow uncooked egg to flow into empty spaces.\"\n        },\n        {\n            \"stepNumber\": 3,\n            \"description\": \"When eggs are almost set on surface but still look moist, cover half of omelette with filling. Slip spatula under unfilled side; fold over onto filled half.\"\n        },\n        {\n            \"stepNumber\": 4,\n            \"description\": \"Cook for a minute, then slide omelette onto plate.\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/recipes/instructions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recipes",
+						"instructions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Tips",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjIxMDA2fQ.FtX669rwWgyC-4McPq7pRmZbU_o7pOFvN-RIvxzRDLY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 18,\n    \"tips\": [\n        \"Nutrition facts are based on a 2 egg omelette without filling.\",\n        \"Using the proper skillet or pan is important to successful omelette making. The ideal skillet for a 1, 2 or 3-egg omelette is about 8 inches (20 cm) in diameter at the base. It should be shallow with sloping sides to make it easier to slide the omelette out of the skillet and onto a plate.\",\n        \"An omelette can be made quickly and easier if the skillet is hot when the egg mixture is added. The skillet is hot enough when a drop of water rolls around instead of bursting into steam immediately.\",\n        \"Preparing individual omelettes, rather than one large one, will result in lighter and fluffier omelettes that are easier to handle.\",\n        \"The Perfect Omelette recipe can be multiplied for as many servings as you need. Use 1/2 cup (125 mL) of egg mixture for each 2-egg omelette and 3/4 cup (175 mL) for a 3-egg omelette.\",\n        \"The fewer eggs, the quicker it will cook, so you can use a smaller skillet for a one- or two-egg omelette and one that measures 8-inches (20 cm) at the base for a 3-egg omelette.\",\n        \"You can use cooking spray in place of the butter or oil.\",\n        \"Covering the folded omelette and cooking for an extra minute helps to heat up the filling, melt any cheese, and finish cooking any remaining undercooked egg. This step is optional if your filling doesn’t require heating and the egg already appears cooked to your liking.\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/recipes/tips",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recipes",
+						"tips"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Nutritions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjIxMDA2fQ.FtX669rwWgyC-4McPq7pRmZbU_o7pOFvN-RIvxzRDLY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 18,\n    \"nutritions\": {\n        \"calories\": \"148 mg\",\n        \"fat\": \"11 g\",\n        \"saturatedFat\": \"3 g\",\n        \"transFat\": \"0 g\",\n        \"carbohydrate\": \"2 g\",\n        \"fibre\": \"0 g\",\n        \"sugar\": \"0 g\",\n        \"protein\": \"12 g\",\n        \"sodium\": \"207 mg\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/recipes/nutritions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recipes",
+						"nutritions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Profile Account",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjI3MDk1fQ.CnlYf46Yd5JH3gw1eJ1H-QR_HRQWpmz5i0qVxVmUews",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/accounts/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"accounts",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recipe Details",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjI3MDk1fQ.CnlYf46Yd5JH3gw1eJ1H-QR_HRQWpmz5i0qVxVmUews",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/recipes/detail?id=18",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recipes",
+						"detail"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "18"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Account",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjI3MDk1fQ.CnlYf46Yd5JH3gw1eJ1H-QR_HRQWpmz5i0qVxVmUews",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\": \"test@2025\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/accounts/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"accounts",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Recipe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNjIwMDg5fQ.TD5fvvy9XyZVTUF1SYBJHcBGTP8Gd6Zw5qTGPdKFlrQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/api/recipes/delete/13",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recipes",
+						"delete",
+						"13"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Recipe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksImVtYWlsIjoiYXRpcmVrcG90aGl3YWxhQHJlY2lwZXMuY29tIiwiaWF0IjoxNzQzNTMyNzMyfQ.qqOPdDop9DfdEv5bCjvmrZNw_3yGsuyTv6lmHXzXxAk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/recipes/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recipes",
+						"list"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
