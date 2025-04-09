@@ -18,14 +18,33 @@ class AccountController {
         if (!photo) {
             return res.status(StatusCode.BadRequest).json({ error: StatusMessage.BadRequest });
         }
+        const connect = await db.getConnection();
         try {
-            const photoUrl = `/uploads/accounts/${photo}`;
-            await db.query(SqlQuery.uploadPhoto, [photoUrl, req.account.id]);
-            return res.status(StatusCode.OK).json({
-                "url": photoUrl
-            });
+            await connect.beginTransaction();
+            const [results] = await connect.query(SqlQuery.getAccountViaId, [req.account.id]);
+            if (results.length > 0) {
+                const photoUrl = `/uploads/accounts/${photo}`;
+                await connect.query(SqlQuery.uploadPhoto, [photoUrl, req.account.id]);
+
+                // Delete Photo
+                const account = results[0]
+                const filePath = path.join(__dirname, `../..${account.photo}`);
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+                }
+
+                res.status(StatusCode.OK).json({
+                    "url": photoUrl
+                });
+            } else {
+                res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
+            }
+            await connect.commit()
         } catch (error) {
-            return res.status(StatusCode.InternalServerError).json({ error: error.message });
+            res.status(StatusCode.InternalServerError).json({ error: error.message });
+            await connect.rollback()
+        } finally {
+            connect.release();
         }
     }
 
@@ -133,14 +152,13 @@ class AccountController {
                     res.status(StatusCode.UnAuthorized).json({ error: StatusMessage.UnAuthorized })
                 }
                 await connect.query(SqlQuery.deleteAccount, id);
-                if (account.photo) {
-                    const filePath = path.join(__dirname, `../..${account.photo}`);
-                    console.log(`File Path: ${filePath}`);
-                    if (fs.existsSync(filePath)) {
-                        console.log('File Path: Exists');
-                        fs.unlinkSync(filePath);
-                    }
+
+                // Delete Photo
+                const filePath = path.join(__dirname, `../..${account.photo}`);
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
                 }
+
                 res.status(StatusCode.NoContent).end();
             } else {
                 res.status(StatusCode.NotFound).json({ error: StatusMessage.NotFound });
@@ -186,6 +204,15 @@ class AccountController {
             await connect.rollback();
         } finally {
             connect.release();
+        }
+    }
+
+    static async deletePhoto(photo) {
+        if (photo) {
+            const filePath = path.join(__dirname, `../..${photo}`);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
         }
     }
 }
