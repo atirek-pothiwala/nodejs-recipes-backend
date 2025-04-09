@@ -180,7 +180,7 @@ class RecipeController {
                 createdAt: row.created_at,
                 ingredients: JSON.parse(row.ingredients || "[]"),
                 instructions: JSON.parse(row.instructions || "[]"),
-                nutritions: JSON.parse(row.nutritions || "[]")[0],
+                nutritions: JSON.parse(row.nutritions || "[]"),
                 tips: JSON.parse(row.tips || "[]"),
                 variations: JSON.parse(row.variations || "[]")
             }));
