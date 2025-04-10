@@ -23,12 +23,12 @@ class AccountController {
             await connect.beginTransaction();
             const [results] = await connect.query(SqlQuery.getAccountViaId, [req.account.id]);
             if (results.length > 0) {
-                const photoUrl = `/uploads/accounts/${photo}`;
+                const photoUrl = `/accounts/${photo}`;
                 await connect.query(SqlQuery.uploadPhoto, [photoUrl, req.account.id]);
 
                 // Delete Photo
                 const account = results[0]
-                const filePath = path.join(__dirname, `../..${account.photo}`);
+                const filePath = path.join(__dirname, `../../uploads${account.photo}`);
                 if (fs.existsSync(filePath)) {
                     fs.unlinkSync(filePath);
                 }
@@ -154,7 +154,7 @@ class AccountController {
                 await connect.query(SqlQuery.deleteAccount, id);
 
                 // Delete Photo
-                const filePath = path.join(__dirname, `../..${account.photo}`);
+                const filePath = path.join(__dirname, `../../uploads${account.photo}`);
                 if (fs.existsSync(filePath)) {
                     fs.unlinkSync(filePath);
                 }
@@ -204,15 +204,6 @@ class AccountController {
             await connect.rollback();
         } finally {
             connect.release();
-        }
-    }
-
-    static async deletePhoto(photo) {
-        if (photo) {
-            const filePath = path.join(__dirname, `../..${photo}`);
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
         }
     }
 }
